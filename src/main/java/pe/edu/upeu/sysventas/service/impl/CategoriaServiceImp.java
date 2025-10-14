@@ -15,6 +15,6 @@ public class CategoriaServiceImp extends CrudGenericoServiceImp<Categoria,Long> 
 
     @Override
     protected ICrudGenericoRepository<Categoria, Long> getRepo() {
-        return null;
+        return categoriaRepository;
     }
 }
