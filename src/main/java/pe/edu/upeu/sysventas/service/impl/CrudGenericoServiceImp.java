@@ -1,6 +1,7 @@
 package pe.edu.upeu.sysventas.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 import pe.edu.upeu.sysventas.exception.ModelNotFoundException;
 import pe.edu.upeu.sysventas.repository.ICrudGenericoRepository;
@@ -10,16 +11,17 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public abstract class CrudGenericoServiceImp<T, ID> implements ICrudGenericoService<T, ID> {
-    protected abstract ICrudGenericoRepository<T, ID> getRepo();
+public abstract class CrudGenericoServiceImp<T,ID> implements ICrudGenericoService<T,ID> {
+
+    protected abstract ICrudGenericoRepository<T,ID> getRepo();
 
     @Override
-    public T save(T t){
+    public T save(T t) {
         return getRepo().save(t);
     }
 
     @Override
-    public T update(ID id, T t){
+    public T update(ID id, T t) {
         getRepo().findById(id).orElseThrow(()->new ModelNotFoundException("ID NOT FOUND "+id));
         return getRepo().save(t);
     }
@@ -30,13 +32,13 @@ public abstract class CrudGenericoServiceImp<T, ID> implements ICrudGenericoServ
     }
 
     @Override
-    public T findbyId(ID id) {
-        return getRepo().findById(id).orElseThrow(()->new ModelNotFoundException("ID NOT FOUND "+id));
+    public T findById(ID id) {
+       return getRepo().findById(id).orElseThrow(()->new ModelNotFoundException("ID NOT FOUND "+id));
     }
 
     @Override
     public void deleteById(ID id) {
-        if (getRepo().existsById(id)) {
+        if(!getRepo().existsById(id)){
             throw new ModelNotFoundException("ID NOT FOUND "+id);
         }
         getRepo().deleteById(id);
